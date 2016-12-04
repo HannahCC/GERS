@@ -16,8 +16,7 @@ public class GetEdgeVector {
 
 	public static void main(String args[]) throws IOException {
 		
-		Config.init(args[0], args[1], args[2]);
-		
+		Config.initGetEdgeVecEnv(args[0], args[1], args[2], args[3], Integer.parseInt(args[4]));
 		Map<String, Double[]> nodeVector = new HashMap<String, Double[]>();
 		FileUtils.readVector(Config.NodeVectorFile, nodeVector);
 		File graphFile = new File(Config.GraphFile);

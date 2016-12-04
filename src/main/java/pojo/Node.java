@@ -2,8 +2,10 @@ package pojo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import conf.Config;
+import utils.Utils;
 
 public class Node {
 	String id = null;
@@ -92,6 +94,34 @@ public class Node {
 		return new_w;
 	}
 
+	public double[][] getSubGraph(Map<String, Double[]> vectors) {
+		double[][] w = getSubGraph();
+		if (w == null)
+			return w;
+		int size = w.length;
+		if (Config.DIRECTED) {
+			for (int i = 0; i < size; i++) {
+				for (int j = 0; j < size; j++) {
+					if (w[i][j] == 1) {
+						w[i][j] = Utils.cosineSimilarity(vectors.get(adjacents.get(i).id),
+								vectors.get(adjacents.get(j).id));
+					}
+				}
+			}
+		} else {
+			for (int i = 0; i < size; i++) {
+				for (int j = i + 1; j < size; j++) {
+					if (w[i][j] == 1) {
+						w[j][i] = w[i][j] = Utils.cosineSimilarity(vectors.get(adjacents.get(i).id),
+								vectors.get(adjacents.get(j).id));
+					}
+				}
+			}
+		}
+
+		return w;
+	}
+
 	public void setCluster(int k, int[] clusterLabel) {
 		int sum = k + isolate_size;
 		int size = clusterLabel.length;
@@ -128,4 +158,5 @@ public class Node {
 	public Cluster[] getClusters() {
 		return clusters;
 	}
+
 }

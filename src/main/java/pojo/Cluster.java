@@ -34,6 +34,8 @@ public class Cluster {
 		int count = 1;
 		int max = Config.MAX_LENGTH;
 		int size = nodes.size();
+		if (size == 0)
+			return null;
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(id + " ");
 

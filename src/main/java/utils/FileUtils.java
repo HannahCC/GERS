@@ -47,9 +47,10 @@ public class FileUtils {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 		for (Node node : collection) {
 			for (Cluster cluster : node.getClusters()) {
-				// System.out.println(node.getId()+"/ " + cluster.getId()+"/ "
-				// +cluster.getNodes().size());
-				bw.write(cluster.toString() + "\r\n");
+				String clusterStr = cluster.toString();
+				if (null != clusterStr) {
+					bw.write(cluster.toString() + "\r\n");
+				}
 			}
 		}
 		bw.flush();
