@@ -38,15 +38,14 @@ public class Cluster {
 			return null;
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(id + " ");
-
-		if (Config.DIRECTED) {
-			for (int i = 0; i < size; i++) {
-				sBuilder.append(nodeId + " " + nodes.get(i).getId() + " ");
-				if ((count++ % max) == 0) {
-					sBuilder.deleteCharAt(sBuilder.length() - 1);
-					sBuilder.append("\r\n" + id + " ");
-				}
+		for (int i = 0; i < size; i++) {
+			sBuilder.append(nodeId + " " + nodes.get(i).getId() + " ");
+			if ((count++ % max) == 0) {
+				sBuilder.deleteCharAt(sBuilder.length() - 1);
+				sBuilder.append("\r\n" + id + " ");
 			}
+		}
+		if (Config.DIRECTED) {
 			for (int i = 0; i < size; i++) {
 				for (int j = 0; j < size; j++) {
 					if (i == j)
@@ -61,13 +60,6 @@ public class Cluster {
 				}
 			}
 		} else {
-			for (int i = 0; i < size; i++) {
-				sBuilder.append(nodeId + " " + nodes.get(i).getId() + " ");
-				if ((count++ % max) == 0) {
-					sBuilder.deleteCharAt(sBuilder.length() - 1);
-					sBuilder.append("\r\n" + id + " ");
-				}
-			}
 			for (int i = 0; i < size; i++) {
 				for (int j = i + 1; j < size; j++) {
 					if (nodes.get(i).adjacents.contains(nodes.get(j))) {

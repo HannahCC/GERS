@@ -41,22 +41,6 @@ public class FileUtils {
 		}
 		br.close();
 	}
-
-	public static void writeCluster(String filename, Collection<Node> collection) throws IOException {
-		File file = new File(filename);
-		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-		for (Node node : collection) {
-			for (Cluster cluster : node.getClusters()) {
-				String clusterStr = cluster.toString();
-				if (null != clusterStr) {
-					bw.write(cluster.toString() + "\r\n");
-				}
-			}
-		}
-		bw.flush();
-		bw.close();
-	}
-
 	public static void readVector(String nodeVectorFile, Map<String, Double[]> nodeVectors) throws IOException {
 		File f = new File(nodeVectorFile);
 		BufferedReader br = new BufferedReader(new FileReader(f));
@@ -76,5 +60,40 @@ public class FileUtils {
 		}
 		br.close();
 	}
+	public static void writeCluster(String filename, Collection<Node> collection) throws IOException {
+		File file = new File(filename);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		for (Node node : collection) {
+			for (Cluster cluster : node.getClusters()) {
+				String clusterStr = cluster.toString();
+				if (null != clusterStr) {
+					bw.write(cluster.toString() + "\r\n");
+				}
+			}
+		}
+		bw.flush();
+		bw.close();
+	}
+
+	public static void writeFriends(String filename, Collection<Node> collection) throws IOException {
+		File file = new File(filename);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		for (Node node : collection) {
+			bw.write(node.toString()+"\r\n");
+		}
+		bw.flush();
+		bw.close();
+	}
+	public static void writeFriendsEdge(String filename, Collection<Node> collection) throws IOException {
+		File file = new File(filename);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		for (Node node : collection) {
+			bw.write(node.getEdge()+"\r\n");
+		}
+		bw.flush();
+		bw.close();
+	}
+	
+
 
 }

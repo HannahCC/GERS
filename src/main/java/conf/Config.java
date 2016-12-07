@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public class Config {
 
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static boolean DIRECTED = false;
 	public static String CurPath = null;
 	public static String GraphFile = null;

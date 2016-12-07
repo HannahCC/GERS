@@ -46,15 +46,24 @@ public class EgoNetworkCluster {
 		case "denclue":
 			clustering = new DENCLUEFact();
 			break;
+		case "fri":
+			getFri(nodes);
+			break;
+		case "friedge":
+			getFriEdge(nodes);
+			break;
 		default:
 			System.out.println("wrong cluster method.");
 			return;
 		}
-
+		if (clusterMethod.equals("fri")||clusterMethod.equals("friedge")) {
+			return;
+		}
 		int i = 0;
 		int size = 0, isolateNode = 0, onlyTwoNode = 0;
 		for (Node node : nodes.values()) {
-			if(Config.DEBUG)System.out.print(i+"_");
+			if (Config.DEBUG)
+				System.out.print(i + "_");
 			double[][] subGraph = null;
 			if (vectors != null) {
 				subGraph = node.getSubGraph(vectors);
@@ -69,17 +78,27 @@ public class EgoNetworkCluster {
 				onlyTwoNode++;
 			} else {
 				size = (int) Math.sqrt(subGraph.length / 2) + 1;
-				if(Config.DEBUG)System.out.println(size);
-				if(i==94){
+				if (Config.DEBUG)
+					System.out.println(size);
+				if (i == 94) {
 					System.out.println(subGraph);
 				}
 				node.setCluster(subGraph.length, clustering.getClusterLabel(subGraph, size));
 			}
-			if(i++%1000==0)System.out.println(i+"/"+nodes.size());
+			if (i++ % 1000 == 0)
+				System.out.println(i + "/" + nodes.size());
 		}
 		System.out.println(isolateNode + "node's adjacents are isolated.");
 		System.out.println(onlyTwoNode + "node's adjacents with only two vertex connected.");
 		FileUtils.writeCluster(Config.ClusterFile, nodes.values());
+	}
+
+	private static void getFriEdge(Map<String, Node> nodes) throws IOException {
+		FileUtils.writeFriendsEdge(Config.ClusterFile, nodes.values());
+	}
+
+	private static void getFri(Map<String, Node> nodes) throws IOException {
+		FileUtils.writeFriends(Config.ClusterFile, nodes.values());
 	}
 
 }
