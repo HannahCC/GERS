@@ -16,10 +16,14 @@ import utils.FileUtils;
 public class EgoNetworkCluster {
 
 	public static void main(String[] args) throws IOException {
-		if (args.length == 3) {
-			Config.initClusterEnv(args[0], args[1], args[2]);
+		if (args.length == 4) {
+			Config.initClusterEnv(args[0], args[1], args[2], Integer.parseInt(args[3]));
 		} else if (args.length == 5) {
 			Config.initClusterEnv(args[0], args[1], args[2], args[3], Integer.parseInt(args[4]));
+			// String curPath, String graphFile, String clusterFile, String clusterMethod,int asNode
+		} else if (args.length == 6) {
+			Config.initClusterEnv(args[0], args[1], args[2], Integer.parseInt(args[3]), args[4],
+					Integer.parseInt(args[5]));
 		} else {
 			System.out.println("the params is wrong.");
 			return;
@@ -27,9 +31,9 @@ public class EgoNetworkCluster {
 		String clusterMethod = Config.ClusterMethod;
 		Map<String, Node> nodes = new HashMap<String, Node>();
 		FileUtils.readGraph(Config.GraphFile, nodes);
-		Map<String, Double[]> vectors = null;
+		Map<String, double[]> vectors = null;
 		if (Config.NodeVectorFile != null) {
-			vectors = new HashMap<String, Double[]>();
+			vectors = new HashMap<String, double[]>();
 			FileUtils.readVector(Config.NodeVectorFile, vectors);
 		}
 		Clustering clustering = null;
@@ -52,11 +56,14 @@ public class EgoNetworkCluster {
 		case "friedge":
 			getFriEdge(nodes);
 			break;
+		case "closure":
+			getClosure(nodes);
+			break;
 		default:
 			System.out.println("wrong cluster method.");
 			return;
 		}
-		if (clusterMethod.equals("fri")||clusterMethod.equals("friedge")) {
+		if (clusterMethod.equals("fri") || clusterMethod.equals("friedge") || clusterMethod.equals("closure")) {
 			return;
 		}
 		int i = 0;
@@ -80,9 +87,6 @@ public class EgoNetworkCluster {
 				size = (int) Math.sqrt(subGraph.length / 2) + 1;
 				if (Config.DEBUG)
 					System.out.println(size);
-				if (i == 94) {
-					System.out.println(subGraph);
-				}
 				node.setCluster(subGraph.length, clustering.getClusterLabel(subGraph, size));
 			}
 			if (i++ % 1000 == 0)
@@ -91,6 +95,10 @@ public class EgoNetworkCluster {
 		System.out.println(isolateNode + "node's adjacents are isolated.");
 		System.out.println(onlyTwoNode + "node's adjacents with only two vertex connected.");
 		FileUtils.writeCluster(Config.ClusterFile, nodes.values());
+	}
+
+	private static void getClosure(Map<String, Node> nodes) throws IOException {
+		FileUtils.writeClosureEdge(Config.ClusterFile, nodes.values());
 	}
 
 	private static void getFriEdge(Map<String, Node> nodes) throws IOException {

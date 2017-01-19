@@ -2,14 +2,14 @@ package utils;
 
 public class Utils {
 
-	public static double cosineSimilarity(Double[] vec1, Double[] vec2) {
+	public static double cosineSimilarity(double[] vec1, double[] vec2) {
 		double dotProduct = dotProduct(vec1, vec2);
 		double normVec1 = Math.sqrt(dotProduct(vec1, vec1));
 		double normVec2 = Math.sqrt(dotProduct(vec2, vec2));
 		return Math.abs(dotProduct / (normVec1 * normVec2));
 	}
 
-	private static <K> double dotProduct(Double[] vec1, Double[] vec2) {
+	private static double dotProduct(double[] vec1, double[] vec2) {
 		double dotProduct = 0.0;
 		for (int i = 0, size = vec1.length; i < size; i++) {
 			dotProduct += vec1[i] * vec2[i];
@@ -36,4 +36,5 @@ public class Utils {
 		}
 		System.out.println();
 	}
+
 }

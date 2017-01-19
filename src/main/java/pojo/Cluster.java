@@ -33,45 +33,48 @@ public class Cluster {
 	public String toString() {
 		int count = 1;
 		int max = Config.MAX_LENGTH;
+		int type = Config.AsNode;
 		int size = nodes.size();
+		int id1 = 0, id2;
+		String item;
 		if (size == 0)
 			return null;
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(id + " ");
+
+		id1 = Integer.parseInt(nodeId);
 		for (int i = 0; i < size; i++) {
-			sBuilder.append(nodeId + " " + nodes.get(i).getId() + " ");
 			if ((count++ % max) == 0) {
 				sBuilder.deleteCharAt(sBuilder.length() - 1);
 				sBuilder.append("\r\n" + id + " ");
 			}
-		}
-		if (Config.DIRECTED) {
-			for (int i = 0; i < size; i++) {
-				for (int j = 0; j < size; j++) {
-					if (i == j)
-						continue;
-					if (nodes.get(i).adjacents.contains(nodes.get(j))) {
-						sBuilder.append(nodes.get(i).getId() + " " + nodes.get(j).getId() + " ");
-						if ((count++ % max) == 0) {
-							sBuilder.deleteCharAt(sBuilder.length() - 1);
-							sBuilder.append("\r\n" + id + " ");
-						}
-					}
-				}
+			id2 = Integer.parseInt(nodes.get(i).getId());
+			if (type == 0) {
+				item = id1 < id2 ? id1 + "_" + id2 + " " : id2 + "_" + id1 + " ";
+			} else {
+				item = id1 < id2 ? id1 + " " + id2 + " " : id2 + " " + id1 + " ";
 			}
-		} else {
-			for (int i = 0; i < size; i++) {
-				for (int j = i + 1; j < size; j++) {
-					if (nodes.get(i).adjacents.contains(nodes.get(j))) {
-						sBuilder.append(nodes.get(i).getId() + " " + nodes.get(j).getId() + " ");
-						if ((count++ % max) == 0) {
-							sBuilder.deleteCharAt(sBuilder.length() - 1);
-							sBuilder.append("\r\n" + id + " ");
-						}
+			sBuilder.append(item);
+		}
+		for (int i = 0; i < size; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (nodes.get(i).adjacents.contains(nodes.get(j))) {
+					if ((count++ % max) == 0) {
+						sBuilder.deleteCharAt(sBuilder.length() - 1);
+						sBuilder.append("\r\n" + id + " ");
 					}
+					id1 = Integer.parseInt(nodes.get(i).getId());
+					id2 = Integer.parseInt(nodes.get(j).getId());
+					if (type == 0) {
+						item = id1 < id2 ? id1 + "_" + id2 + " " : id2 + "_" + id1 + " ";
+					} else {
+						item = id1 < id2 ? id1 + " " + id2 + " " : id2 + " " + id1 + " ";
+					}
+					sBuilder.append(item);
 				}
 			}
 		}
+
 		return sBuilder.toString().trim();
 	}
 
